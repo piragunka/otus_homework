@@ -74,9 +74,20 @@
     ansible_user: ubuntu
     ansible_ssh_private_key_file: ~/.ssh/id_rsa
     ansible_ssh_common_args: '-o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ProxyCommand="ssh -W %h:%p ubuntu@{{ jump_host }}"'
+    database_name: otus
+    database_user: ubuntu
+    database_password: yaebualibabu
 
   tasks:
 
+    - name: install pip3
+      apt: name=python3-pip state=present
+
+    - name: Make sure psycopg2 is installed
+      pip:
+        name: psycopg2-binary
+        state: present    
+    
     - name: Add postgresql apt repository key
       apt_key:
         url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
@@ -113,6 +124,51 @@
         backup: yes
       notify:
         - restart postgresql
+
+    - name: Configure pg_hba.conf
+      template:
+        src: ./templates/pg_hba.conf.j2
+        dest: "/etc/postgresql/13/main/pg_hba.conf"
+        owner: postgres
+      notify:
+        - restart postgresql
+
+    - name: "Ensure the database {{ database_name }} is created"
+      become: yes
+      become_user: postgres
+      postgresql_db:
+        name: "{{ database_name }}"
+        encoding: UTF-8
+        lc_collate: en_US.UTF-8
+        lc_ctype: en_US.UTF-8
+        template: template0
+
+    - name: "Ensure the user {{ database_user }} has access to the database"
+      become: yes
+      become_user: postgres
+      postgresql_user:
+        db: "{{ database_name }}"
+        name: "{{ database_user }}"
+        password: "{{ database_password }}"
+        encrypted: yes
+        priv: ALL 
+      
+  handlers:
+
+    - name: enable postgresql
+      service: name=postgresql enabled=yes
+
+    - name: start postgresql
+      service: name=postgresql state=started
+
+    - name: stop postgresql
+      service: name=postgresql state=stopped
+
+    - name: restart postgresql
+      service: name=postgresql state=restarted
+
+    - name: reload postgresql
+      service: name=postgresql state=reloaded
     
 
 - name: frontend
@@ -141,7 +197,5 @@
       file: dest=/etc/nginx/sites-enabled/default src={{ conf_file }} state=link
 
     - name: restart nginx
-      service: name=nginx state=restarted  
-
-         
+      service: name=nginx state=restarted    
 
