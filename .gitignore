@@ -1,5 +1,10 @@
 ### AL ###
 #Template for AL projects for Dynamics 365 Business Central
+#Terraform homework_1
+terraform.tfvars
+.terraform
+terraform.tfstate*
+.terraform.lock.hcl
 #launch.json folder
 .vscode/
 #Cache folder

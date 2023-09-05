@@ -1,0 +1,17 @@
+        upstream backend {
+            server {{ var_backend1 }};
+            server {{ var_backend2 }};
+        }
+        
+        server {
+            
+            listen 80 default_server;
+	        root /usr/share/nginx/html;
+	        index index.html index.htm;
+
+	        server_name {{ var_server_name }};
+	
+	        location / {
+		        proxy_pass http://backend;
+	        }
+        }
