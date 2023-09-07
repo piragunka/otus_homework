@@ -1,2 +1,2 @@
 # otus_homework
-especially for garibaldiks
+specially for garibaldiks
