@@ -1,0 +1,5 @@
+---
+pg_version: 13
+database_name: otus
+database_user: ubuntu
+database_password: yaebualibabu

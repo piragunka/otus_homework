@@ -74,9 +74,6 @@
     ansible_user: ubuntu
     ansible_ssh_private_key_file: ~/.ssh/id_rsa
     ansible_ssh_common_args: '-o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no" -o ProxyCommand="ssh -W %h:%p ubuntu@{{ jump_host }}"'
-    database_name: otus
-    database_user: ubuntu
-    database_password: yaebualibabu
 
   tasks:
 
@@ -106,7 +103,7 @@
 
     - name: Install postgresql
       apt:
-        name: "postgresql-13"
+        name: "postgresql-{{ pg_version }}"
         state: present
 
     - name: Ensure postgresql is enabled running
@@ -117,7 +114,7 @@
 
     - name: Change listen_addresses to '*'
       lineinfile:
-        dest: "/etc/postgresql/13/main/postgresql.conf"
+        dest: "/etc/postgresql/{{ pg_version }}/main/postgresql.conf"
         regexp: "^#listen_addresses"
         line: "listen_addresses = '*'"
         state: present
@@ -128,7 +125,7 @@
     - name: Configure pg_hba.conf
       template:
         src: ./templates/pg_hba.conf.j2
-        dest: "/etc/postgresql/13/main/pg_hba.conf"
+        dest: "/etc/postgresql/{{ pg_version }}/main/pg_hba.conf"
         owner: postgres
       notify:
         - restart postgresql

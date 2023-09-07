@@ -2,7 +2,7 @@
 #Template for AL projects for Dynamics 365 Business Central
 #Terraform
 terraform.tfvars
-.terraform
+.terraform/
 terraform.tfstate*
 .terraform.lock.hcl
 #launch.json folder
