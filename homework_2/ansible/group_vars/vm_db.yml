@@ -1,5 +1,6 @@
 ---
 pg_version: 13
-database_name: otus
-database_user: ubuntu
-database_password: yaebualibabu
+db_name: postgres
+db_user: postgres
+db_password: postgres
+var_server_name: '{{ groups.vm_db[0] }}'

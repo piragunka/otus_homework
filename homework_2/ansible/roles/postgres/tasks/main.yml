@@ -1,12 +1,18 @@
 ---
-- name: install pip3
-  apt: name=python3-pip state=present
+- name: Update apt repo and cache on all Ubuntu boxes
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+    cache_valid_time: 3600
 
-- name: Make sure psycopg2 is installed
-  pip:
-    name: psycopg2-binary
-    state: present    
-    
+- name: Install required packages
+  apt:
+    name:
+      - wget
+      - python3-psycopg2
+      - acl
+    state: latest
+
 - name: Add postgresql apt repository key
   apt_key:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
@@ -18,56 +24,50 @@
     state: present
     update_cache: yes
 
-- name: Install postgresql dependencies
-  apt:
-    name: acl
-    state: present
-
 - name: Install postgresql
   apt:
-    name: "postgresql-{{ pg_version }}"
-    state: present
+    name: postgresql-14
+    update_cache: yes
+  notify:
+  - enable postgresql
 
-- name: Ensure postgresql is enabled running
-  service:
-    name: postgresql
-    enabled: yes
-    state: started
-
-- name: Change listen_addresses to '*'
+- name: Ensure PostgreSQL is listening on *
   lineinfile:
-    dest: "/etc/postgresql/{{ pg_version }}/main/postgresql.conf"
-    regexp: "^#listen_addresses"
-    line: "listen_addresses = '*'"
+    dest: /etc/postgresql/14/main/postgresql.conf
+    regexp: '^listen_addresses\s*='
+    line: "listen_addresses='*'"
     state: present
-    backup: yes
-  notify:
-      - restart postgresql
+  notify: restart postgresql
 
-- name: Configure pg_hba.conf
-  template:
-    src: ./templates/pg_hba.conf.j2
-    dest: "/etc/postgresql/{{ pg_version }}/main/pg_hba.conf"
-    owner: postgres
-  notify:
-    - restart postgresql
+- name: Add new configuration to "pg_hba.conf"
+  blockinfile:
+    dest: /etc/postgresql/14/main/pg_hba.conf
+    block: |
+      host    all             all             0.0.0.0/0                md5
+      host    all             all             ::/0                     md5
+  notify: restart postgresql
 
-- name: "Ensure the database {{ database_name }} is created"
-  become: yes
-  become_user: postgres
-  postgresql_db:
-    name: "{{ database_name }}"
-    encoding: UTF-8
-    lc_collate: en_US.UTF-8
-    lc_ctype: en_US.UTF-8
-    template: template0
+- name: Change peer identification to trust
+  shell: /bin/sed -i '/^local/s/peer/trust/' /etc/postgresql/14/main/pg_hba.conf
+  notify: restart postgresql
 
-- name: "Ensure the user {{ database_user }} has access to the database"
+- name: Create a Superuser PostgreSQL database user
   become: yes
   become_user: postgres
   postgresql_user:
-    db: "{{ database_name }}"
-    name: "{{ database_user }}"
-    password: "{{ database_password }}"
+    name: '{{ db_user }}'
+    password: '{{ db_password }}'
+    role_attr_flags: CREATEDB,SUPERUSER,CREATEROLE
     encrypted: yes
-    priv: ALL
+    state: present
+
+- name: "Grant db user access to app db"
+  postgresql_privs:
+    type: database
+    database: "{{ db_name }}"
+    roles: "{{ db_user }}"
+    grant_option: no
+    privs: all
+  become: yes
+  become_user: postgres
+

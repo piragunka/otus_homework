@@ -1,15 +1,26 @@
 ---
-- name: backend1
-  hosts: vm_backend1, vm_backend2, vm_frontend
-  become: True
-
-  roles:
-    - { role: nginx, tags: [nginx] }
-          
-- name: db
+- name: install db
   hosts: vm_db
   become: True
   
   roles:
     - { role: postgres, tags: [postgres] }
+
+- name: install nginx
+  hosts: vm_backend1, vm_backend2, vm_frontend
+  become: True
+
+  roles:
+    - { role: nginx, tags: [nginx] }
+
+- name: install django
+  hosts: vm_backend1, vm_backend2
+  become: True
+  
+  roles:
+    - { role: django, tags: [django] }
+
+
+          
+
 
