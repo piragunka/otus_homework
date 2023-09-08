@@ -1,6 +1,6 @@
 ---
 - name: copy django project
-  copy: src=files/code dest=/home/ubuntu/ mode=0775  force=no
+  copy: src=files/code dest=/home/ubuntu/  mode=0775
 
 - name: Install pip
   apt: name=python3-pip state=latest
@@ -13,7 +13,7 @@
   apt: name=gunicorn state=latest
 
 - name: copy setting django
-  template: src=templates/.env dest=/home/ubuntu/.env mode=0775
+  template: src=templates/.env dest=/home/ubuntu/code/.env mode=0775
 
 - name: copy gunicorn.socket
   template: src=templates/gunicorn.socket dest=/etc/systemd/system/gunicorn.socket mode=0775
@@ -23,3 +23,15 @@
       
 - name: run gunicorn
   command: sudo systemctl enable --now gunicorn.socket
+
+- name: migrate
+  command: python /home/ubuntu/code/manage.py migrate
+
+- name: add ingredients
+  command: python /home/ubuntu/code/manage.py add_ingredients
+
+- name: add tags
+  command: python /home/ubuntu/code/manage.py add_tags
+
+- name: collectstatic
+  command: python /home/ubuntu/code/manage.py collectstatic
