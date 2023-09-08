@@ -1,0 +1,16 @@
+---
+- name: Install nginx
+  apt: name=nginx update_cache=yes cache_valid_time=3600
+
+- name: copy nginx config file
+  template: src=templates/{{ nginx_conf }} dest={{ nginx_conf_file }}
+
+- name: enable configuration
+  file: dest=/etc/nginx/sites-enabled/default src={{ nginx_conf_file }} state=link
+
+- name: copy index.html
+  template: src=templates/{{ index }} dest=/usr/share/nginx/html/index.html
+    mode=0644
+
+- name: restart nginx
+  service: name=nginx state=restarted

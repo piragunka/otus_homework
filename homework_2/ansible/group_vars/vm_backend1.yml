@@ -1,2 +1,4 @@
 ---
 var_server_name: '{{ groups.vm_backend1[0] }}'
+index: 'index_backend1.html.j2'
+nginx_conf: 'nginx_backend.conf.j2'
