@@ -2,3 +2,4 @@
 var_server_name: '{{ groups.vm_backend2[0] }}'
 nginx_conf: 'default.conf.j2'
 project_directory: '/home/ubuntu/code'
+project_homedir: '/home/ubuntu/code'

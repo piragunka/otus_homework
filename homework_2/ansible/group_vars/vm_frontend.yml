@@ -2,5 +2,4 @@
 var_backend1: '{{ groups.vm_backend1[0] }}'
 var_backend2: '{{ groups.vm_backend2[0] }}'
 var_server_name: '{{ groups.vm_frontend[0] }}'
-index: 'index_frontend.html.j2'
 nginx_conf: 'nginx_frontend.conf.j2'

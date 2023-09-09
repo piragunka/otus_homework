@@ -23,15 +23,3 @@
       
 - name: run gunicorn
   command: sudo systemctl enable --now gunicorn.socket
-
-- name: migrate
-  command: python /home/ubuntu/code/manage.py migrate
-
-- name: add ingredients
-  command: python /home/ubuntu/code/manage.py add_ingredients
-
-- name: add tags
-  command: python /home/ubuntu/code/manage.py add_tags
-
-- name: collectstatic
-  command: python /home/ubuntu/code/manage.py collectstatic

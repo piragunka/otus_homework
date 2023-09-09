@@ -9,8 +9,9 @@ Group=www-data
 WorkingDirectory=/home/ubuntu/code
 ExecStart=/usr/bin/gunicorn \
           --access-logfile - \
-          --workers 3 \
+          --workers 1 \
           --bind unix:/run/gunicorn.sock \
+          --bind=127.0.0.1:8000 --bind=[::1]:8000 \
           foodgram.wsgi:application
 
 [Install]
