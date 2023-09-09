@@ -1,6 +1,6 @@
         upstream backend {
-            server {{ var_backend1 }};
-            server {{ var_backend2 }};
+            server {{ var_backend1 }} max_fails=2 fail_timeout=90s;
+            server {{ var_backend2 }} max_fails=2 fail_timeout=90s;
         }
         
         server {
@@ -8,7 +8,7 @@
             listen 80 default_server;
 	        root /usr/share/nginx/html;
 	        index index.html index.htm;
-
+            proxy_connect_timeout 1s;
 	        server_name {{ var_server_name }};
 	
 	        location / {
