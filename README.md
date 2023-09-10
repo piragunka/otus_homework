@@ -10,7 +10,7 @@ ____
 
 :white_check_mark:  1. homework_1 - [Первый terraform скрипт](https://github.com/piragunka/otus_homework/tree/main/homework_1)
 
-:clock1:  1. homework_2 - [Настраиваем балансировку веб-приложения](https://github.com/piragunka/otus_homework/tree/main/homework_2)
+:clock1:  2. homework_2 - [Настраиваем балансировку веб-приложения](https://github.com/piragunka/otus_homework/tree/main/homework_2)
 
 :construction_worker:  3. Реализация GFS2 хранилища на виртуалках под виртуалбокс
 
