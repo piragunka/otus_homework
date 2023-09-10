@@ -8,7 +8,7 @@ ____
 
 :construction_worker:  0. Doc - [Документация](https://github.com/piragunka/otus_homework/tree/main/doc)
 
-:white_check_mark:  1. homework_1 - [Первый terraform скрипт](https://github.com/piragunka/otus_homework/tree/main/homework_1)
+:white_check_mark:  1. homework_1 - [Первый terraform скрипт](https://github.com/piragunka/otus_homework/tree/main/homework_1) (принята, но нужно привести к нормальному виду)
 
 :clock1:  2. homework_2 - [Настраиваем балансировку веб-приложения](https://github.com/piragunka/otus_homework/tree/main/homework_2)
 
