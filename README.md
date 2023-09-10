@@ -6,6 +6,9 @@ ____
 
 :white_check_mark:  1. HW1 - Первый terraform скрипт;
 
+[a workaround link]([repo/blob/master/other_file.md](https://github.com/piragunka/otus_homework/tree/main/homework_1))
+
+
 :clock1:  2. HW2 - Настраиваем балансировку веб-приложения;
 
 :construction_worker:  3. Реализация GFS2 хранилища на виртуалках под виртуалбокс;
