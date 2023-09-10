@@ -1,15 +1,23 @@
 ---
-- name: copy django project
-  copy: src=files/code dest=/home/ubuntu/  mode=0775
+- name: download backend release
+  get_url:
+    url:  https://github.com/piragunka/snatch/releases/download/backend/code.tar.gz
+    dest: /home/ubuntu
 
-- name: Install pip
+- name: extract archive
+  shell: "tar -zxvf 'code.tar.gz'"
+
+- name: chmod
+  shell: chmod 775 /home/ubuntu/code/manage.py
+    
+- name: install pip
   apt: name=python3-pip state=latest
   
 - name: install requirements
   pip:
     requirements: /home/ubuntu/code/requirements.txt
   
-- name: Install gunicorn
+- name: install gunicorn
   apt: name=gunicorn state=latest
 
 - name: copy setting django
