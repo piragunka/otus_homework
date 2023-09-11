@@ -53,9 +53,9 @@ yc_token = "API Key or IAM tokken"     <- туть выбрать тебе ка�
 
 ```mermaid
 flowchart TB
-    A1[Client1] --> B
-    A2[Client2] --> B 
-    A3[Client3] --> B
+    A1[Client1] --> |public ip|B
+    A2[Client2] --> |public ip|B 
+    A3[Client3] --> |public ip|B
     B[Frontend]
     B --> C[backend1] --> E
     B --> D[backend2] --> E
