@@ -3,4 +3,7 @@
   django_manage: command=migrate app_path={{ project_homedir }}
 - name: collectstatic
   django_manage: command=collectstatic app_path={{ project_homedir }}
-
+- name: add ingredients
+  django_manage: command=add_ingredients app_path={{ project_homedir }}
+- name: add tags
+  django_manage: command=add_tags app_path={{ project_homedir }}
